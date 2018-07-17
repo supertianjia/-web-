@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="css/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<a href="log" target="_black">查看开灯日志</a>
+	<div class="switch">
+		<input type="checkbox" name="lightCheck" id="light">
+		<label for="lightCheck"><i></i></label><span></span>
+	</div>
+	<section class="container">
+		<input type="radio" id="five" class="radio" name="progress" value="1">
+			<label for="five" class="label">微弱</label>
+		<input type="radio" id="twentyfive" class="radio" name="progress" value="2">
+			<label for="twentyfive" class="label">护眼</label>
+		<input type="radio" id="fifty" class="radio" name="progress" value="3">
+			<label for="fifty" class="label">正常</label>
+		<input type="radio" id="seventyfive" class="radio" name="progress" value="4">
+			<label for="seventyfive" class="label">高亮</label>
+		<input type="radio" id="onehundred" class="radio" name="progress" value="5">
+			<label for="onehundred" class="label">超亮</label>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>	
+	</section>
+</body>
+</html>
+
+<script>
+	$(".container").hide();
+	document.getElementById("light").onclick = function(){
+		if(this.checked){
+			$.get("openLightServlet", function(resultValue){
+				if(resultValue == "0"){
+					document.getElementById("light").checked = false;
+					//alert("开灯失败");
+				}else{
+					$(".container").show();
+					//alert("开灯成功");
+				}
+			});
+		}else{
+			$.get("closeLightServlet", function(resultValue){
+				if(resultValue == "0"){
+					document.getElementById("light").checked = false;
+					//alert("关灯失败");
+				}else{
+					$(".container").hide();
+					//alert("关灯成功");
+				}
+			});
+		}
+	};
+	
+	$(".container input[name='progress']").on("click",function(){
+		$.get("levelLightServlet",{"level":$(this).val()},function(result){});
+	});
+</script>
